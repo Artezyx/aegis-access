@@ -3,7 +3,6 @@ import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
 import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
-import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 
 type StoredAccount = {
@@ -64,6 +63,8 @@ describe('Aegis Access HTTP contract', () => {
   beforeAll(async () => {
     process.env.JWT_SECRET = 'this-is-a-throwaway-test-secret-not-for-production';
     process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/not_used';
+    // Importar el módulo después de configurar el entorno: ConfigModule valida al importarse.
+    const { AppModule } = await import('../src/app.module');
     db = new FakeDatabase();
     await db.account.create({ data: {
       name: 'Admin de pruebas', email: 'admin@example.com', role: 'admin',
