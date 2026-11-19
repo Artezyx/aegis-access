@@ -65,10 +65,10 @@ describe('Aegis Access HTTP contract', () => {
     process.env.JWT_SECRET = 'this-is-a-throwaway-test-secret-not-for-production';
     process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/not_used';
     db = new FakeDatabase();
-    await db.account.create({
+    await db.account.create({ data: {
       name: 'Admin de pruebas', email: 'admin@example.com', role: 'admin',
       passwordHash: await bcrypt.hash('Admin123', 10),
-    });
+    }});
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
       .overrideProvider(PrismaService).useValue(db)
       .compile();
